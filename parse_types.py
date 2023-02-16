@@ -157,7 +157,7 @@ class Instruction(Node):
         InstructionConfig({'AND': 0x30, 'OR': 0x31, 'NOT': 0x32}, 2, ['register'], ['register', 'int']),
         InstructionConfig({'CMP': 0x18, 'UCMP': 0x19}, 2, ['register'], ['register', 'int']),
         InstructionConfig({'FCMP': 0x1A}, 2, ['register'], ['register', 'float']),
-        InstructionConfig({'SSET': 0x80}, 2, ['register'], ['register', 'int']),
+        InstructionConfig({'SSET': 0x80}, 2, ['register'], ['register', 'int8']),
         InstructionConfig({'SOUT': 0x81}, 1, ['register', 'int24']).modify({"SKIP_FIRST_REG": True}),
     }
 

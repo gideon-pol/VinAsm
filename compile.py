@@ -14,6 +14,7 @@ def compile(filename, output):
 
     try:
         tree = parser.parse(src, lexer=lexer, debug=False)
+        print("Constructed AST:")
         print(tree)
         typecheck(tree)
         gen = Generator(tree)
@@ -27,4 +28,7 @@ def compile(filename, output):
 
 if __name__ == '__main__':
     import sys
+    if len(sys.argv) < 2:
+        print("Usage: python3 compile.py <filename>")
+        sys.exit(1)
     compile(sys.argv[1], "")

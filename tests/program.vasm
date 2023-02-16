@@ -1,0 +1,20 @@
+MOV %RD, 0
+MOV %RE, 0
+$test:
+SSET %RD, %RE
+ADD %RD, 1
+CMP %RD, 128
+
+JS $continue
+MOV %RD, 0
+ADD %RE, 1
+
+$continue:
+SOUT 0xffffff
+MOV %RA, 1
+MOV %RB, 2
+MOV %RC, 3
+ADD %RB, %RA
+CMP %RC, %RB
+JE $test
+STOP

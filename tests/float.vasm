@@ -1,0 +1,10 @@
+$start:
+MOV %RA, 2
+MOV %RB, 3
+ITOF %RA, %RA
+ITOF %RB, %RB
+FADD %RA, %RB
+FTOI %RA, %RA
+CMP %RA, 6
+JS $start
+STOP

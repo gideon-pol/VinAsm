@@ -1,0 +1,6 @@
+MOV %RA, 0
+MOV %RB, 1
+$loop:
+ADD %RA, %RB
+JMP $loop
+STOP

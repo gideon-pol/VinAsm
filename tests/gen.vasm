@@ -1,0 +1,6 @@
+MOV %RA, 0xffff
+$label:
+JMP $label
+MOV %RA, $label
+JMP %RB
+STOP

@@ -114,7 +114,7 @@ class Constant(Node):
 class IntConstant(Constant):
     def __init__(self, value):
         super().__init__(value)
-        self.type = 'int24' if value <= 0xFFFFFF else 'int32'
+        self.type = 'int8' if value <= 0xFF else 'int16' if value <= 0xFFFF else 'int24' if value <= 0xFFFFFF else 'int32'
 
 class FloatConstant(Constant):
     def __init__(self, value):
@@ -147,37 +147,17 @@ class Instruction(Node):
         s += ', '.join([str(arg) for arg in self.children])
         return s
 
-    """
-    instrs_no_args = {
-        'NOP': 0x00,
-        'STOP': 0xffff,
-        # 'RET': 0x46,
-    }
-
-    instrs_one_arg = {
-        'JMP': 0x40, 'JE': 0x41, 'JNE': 0x42, 'JG': 0x43, 'JS': 0x44, # 'CALL': 0x45,
-    }
-
-    instrs_two_args = {
-        'MOV': 0x2, 'STORE': 0x3, 'LOAD': 0x4, # 'PUSH': 0x5, 'POP': 0x6,
-        'ADD': 0x10, 'SUB': 0x11, 'MUL': 0x12, 'DIV': 0x13, 'NEG': 0x14, 'SHL': 0x15, 'SHR': 0x16,
-        'FADD': 0x20, 'FSUB': 0x21, 'FMUL': 0x22, 'FDIV': 0x23, 'FNEG': 0x24,
-        'FTOI': 0x25, 'ITOF': 0x26,
-        'AND': 0x30, 'OR': 0x31, 'NOT': 0x32,
-        'CMP': 0x18, 'UCMP': 0x19, #'FCMP': 0x20,
-    }"""
-
     configs = {
         InstructionConfig({'NOP': 0x00,'STOP': 0xff}, 0), # 'RET': 0x46
         InstructionConfig({'JMP': 0x40, 'JE': 0x41, 'JNE': 0x42, 'JG': 0x43, 'JS': 0x44}, 1, ['register', 'int24', 'label']).modify({"SKIP_FIRST_REG": True}),
-        InstructionConfig({'MOV': 0x2, 'STORE': 0x3}, 2, ['register'], ['register', 'int32', 'int24', 'float', 'label']),
+        InstructionConfig({'MOV': 0x2, 'STORE': 0x3}, 2, ['register'], ['register', 'int', 'float', 'label']),
         InstructionConfig({'LOAD': 0x4}, 2, ['register'], ['register', 'int24']),
-        InstructionConfig({'ADD': 0x10, 'SUB': 0x11, 'MUL': 0x12, 'DIV': 0x13, 'NEG': 0x14, 'SHL': 0x15, 'SHR': 0x16, 'ITOF': 0x26}, 2, ['register'], ['register', 'int32', 'int24']),
+        InstructionConfig({'ADD': 0x10, 'SUB': 0x11, 'MUL': 0x12, 'DIV': 0x13, 'NEG': 0x14, 'SHL': 0x15, 'SHR': 0x16, 'ITOF': 0x26}, 2, ['register'], ['register', 'int']),
         InstructionConfig({'FADD': 0x20, 'FSUB': 0x21, 'FMUL': 0x22, 'FDIV': 0x23, 'FNEG': 0x24, 'FTOI': 0x25}, 2, ['register'], ['register', 'float']),
-        InstructionConfig({'AND': 0x30, 'OR': 0x31, 'NOT': 0x32}, 2, ['register'], ['register', 'int32', 'int24']),
-        InstructionConfig({'CMP': 0x18, 'UCMP': 0x19}, 2, ['register'], ['register', 'int32', 'int24']),
+        InstructionConfig({'AND': 0x30, 'OR': 0x31, 'NOT': 0x32}, 2, ['register'], ['register', 'int']),
+        InstructionConfig({'CMP': 0x18, 'UCMP': 0x19}, 2, ['register'], ['register', 'int']),
         InstructionConfig({'FCMP': 0x1A}, 2, ['register'], ['register', 'float']),
-        InstructionConfig({'SSET': 0x80}, 2, ['register'], ['register', 'int32', 'int24']),
+        InstructionConfig({'SSET': 0x80}, 2, ['register'], ['register', 'int']),
         InstructionConfig({'SOUT': 0x81}, 1, ['register', 'int24']).modify({"SKIP_FIRST_REG": True}),
     }
 

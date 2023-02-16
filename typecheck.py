@@ -1,4 +1,6 @@
 from parse_types import *
+import re
+
 
 """
 TYPECHECKING:
@@ -16,6 +18,16 @@ special rules:
 
 labels = {}
 unresolved_label_uses = []
+
+def is_size_annotated(type):
+    return type[-1] == '8' or type[-2:] == '16' or type[-2:] == '24' or type[-2:] == '32'
+
+def get_base_type(type):
+    return re.sub(r'\d+$', '', type)
+
+def is_valid_type(type, allowed_types):
+    return type in allowed_types or get_base_type(type) in allowed_types
+
 
 def typecheck(node: Node):
     if node.type == None:
@@ -44,11 +56,11 @@ def typecheck(node: Node):
             raise LocationError(node.loc, 'Expected %d arguments, got %d' % (config.arg_num, len(node.children)))
 
         if config.arg_num > 0:
-            if node.children[0].type not in config.first_val_types:
+            if not is_valid_type(node.children[0].type, config.first_val_types):
                 raise TypeError(node.children[0].loc, " | ".join(config.first_val_types), node.children[0].type)
 
         if config.arg_num > 1:
-            if node.children[1].type not in config.second_val_types:
+            if not is_valid_type(node.children[1].type, config.second_val_types):
                 raise TypeError(node.children[1].loc, " | ".join(config.second_val_types), node.children[1].type)
 
     for c in node.children:

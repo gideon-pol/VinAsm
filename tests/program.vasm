@@ -1,4 +1,4 @@
-MOV %RD, 0
+MOV %RD, 0xFFFFFFFF
 MOV %RE, 0
 $test:
 SSET %RD, %RE

@@ -154,7 +154,7 @@ class Instruction(Node):
         InstructionConfig({'LOAD': 0x4}, 2, ['register'], ['register', 'int24']),
         InstructionConfig({'ADD': 0x10, 'SUB': 0x11, 'MUL': 0x12, 'DIV': 0x13, 'NEG': 0x14, 'SHL': 0x15, 'SHR': 0x16, 'ITOF': 0x26}, 2, ['register'], ['register', 'int']),
         InstructionConfig({'FADD': 0x20, 'FSUB': 0x21, 'FMUL': 0x22, 'FDIV': 0x23, 'FNEG': 0x24, 'FTOI': 0x25}, 2, ['register'], ['register', 'float']),
-        InstructionConfig({'AND': 0x30, 'OR': 0x31, 'NOT': 0x32}, 2, ['register'], ['register', 'int']),
+        InstructionConfig({'AND': 0x30, 'OR': 0x31, 'NOT': 0x32, 'XOR': 0x33}, 2, ['register'], ['register', 'int']),
         InstructionConfig({'CMP': 0x18, 'UCMP': 0x19}, 2, ['register'], ['register', 'int']),
         InstructionConfig({'FCMP': 0x1A}, 2, ['register'], ['register', 'float']),
         InstructionConfig({'SSET': 0x80}, 2, ['register'], ['register', 'int8']),

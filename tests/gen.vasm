@@ -1,6 +1,3 @@
-MOV %RA, 0xffff
-$label:
-JMP $label
-MOV %RA, $label
-JMP %RB
+MOV %RA, 1
+MOV %RB, %RA
 STOP

@@ -28,13 +28,12 @@ class Generator():
         print("Label " + decl.label + " at " + str(int(self.write_addr/4)))
     
     def generate_instr(self, decl):
-        self.write(bytes([0 for i in range(2)]))
+        self.write(bytes([0 for _ in range(2)]))
         opcode_bytes = decl.get_code().to_bytes(1, byteorder='big')
         self.write(opcode_bytes)
-        print(decl.opcode + ": " + bytearray_to_hex(opcode_bytes))
 
         if len(decl.children) == 0:
-            self.write(bytes([0,0]))
+            self.write(bytes([0]))
             return
 
         options = 0
@@ -77,7 +76,7 @@ class Generator():
     def output(self, filename):
         with open(filename, 'w+') as f:
             # loop through the bytes in pairs
-            for i in range(0, len(self.program_bytes) - 4, 4):
+            for i in range(0, len(self.program_bytes), 4):
                 # convert the pair to a 32 bit int
                 b = self.program_bytes[i] << 24 | self.program_bytes[i + 1] << 16 | self.program_bytes[i + 2] << 8 | self.program_bytes[i + 3]
                 # write the int to the file in hex

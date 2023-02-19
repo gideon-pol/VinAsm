@@ -1,5 +1,9 @@
 import ply.lex as lex
 from parse_types import *
+import re
+
+print(re.search('/\*', '/*hello*/').group(0))
+print(re.search('//.*', '// hello\n').group(0))
 
 states = (
     ('comment', 'exclusive'),
@@ -33,7 +37,6 @@ t_ignore_COMMENT = r'//.*'  # single-line comment
 
 def t_ID(t):
     r'[a-zA-Z][a-zA-Z0-9_]*'
-
     if t.value in instructions_map:
         #t.type = 'INST_' + str(Instruction.get_arg_num(t.value)) + '_ARGS'
         t.type = 'OPCODE'
@@ -69,6 +72,15 @@ def t_ANY_newline(t):
     t.lexer.last_newline_pos = t.lexpos + len(t.value) - 1
     t.type = 'NEWLINE'
     return t
+
+def t_comment(t):
+    r'/\*'
+    t.lexer.begin('comment')
+
+def t_comment_end(t):
+    r'\*/|.'
+    if t.value == '*/':
+        t.lexer.begin('INITIAL')
 
 def t_error(t):
     raise LocationError(token_loc(t), 'Unexpected token \'%s\'' % t.value.split('\n')[0])

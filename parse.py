@@ -57,8 +57,9 @@ def p_instruction(p):
     args = p[2] if p[2] != None else []
     p[0] = Instruction(p[1], args).at(p)
 
-def p_ignore_newline(p):
-    '''newline : NEWLINE'''
+def p_newline(p):
+    '''newline : NEWLINE
+               | newline NEWLINE'''
     pass
 
 def p_error(t):

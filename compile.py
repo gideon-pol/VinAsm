@@ -1,5 +1,6 @@
 from lexer import create_lexer
 from parse import create_parser
+from microcode import resolve_microcode
 from codegen import Generator
 from typecheck import typecheck
 from parse_types import CompilationError
@@ -16,7 +17,12 @@ def compile(filename, output):
         tree = parser.parse(src, lexer=lexer, debug=False)
         print("Constructed AST:")
         print(tree)
+
         typecheck(tree)
+        tree = resolve_microcode(tree)
+        print("Constructed AST after microcode replacement:")
+        print(tree)
+
         gen = Generator(tree)
         gen.generate()
         gen.output(filename.split('.')[0] + '.4vin')

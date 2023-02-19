@@ -23,7 +23,7 @@ class CompilationError(Exception):
         with open(filename, 'r') as f:
             for i, l in enumerate(f.readlines()):
                 if i == lineno - 1:
-                    return l.strip()
+                    return l.rstrip()
 
     def format(self, msg, filename, line, lineno, pos):
         s = '%s:%d:%d %s\n     %s' % (
@@ -159,6 +159,8 @@ class Instruction(Node):
         InstructionConfig({'FCMP': 0x1A}, 2, ['register'], ['register', 'float']),
         InstructionConfig({'SSET': 0x80}, 2, ['register'], ['register', 'int8']),
         InstructionConfig({'SOUT': 0x81}, 1, ['register', 'int24']).modify({"SKIP_FIRST_REG": True}),
+        InstructionConfig({'PUSH': 0x5}, 1, ['register', 'int', 'float']).modify({"MICROCODE": "STORE %RSP, %0\nADD %RSP, 1\n"}), # 'PUSH': 0x5
+        InstructionConfig({'POP': 0x6}, 1, ['register']).modify({"MICROCODE": "SUB %RSP, 1\nLOAD %0, %RSP\n"}), # 'POP': 0x6
     }
 
     def get_opcodes():

@@ -53,7 +53,7 @@ def typecheck(node: Node):
         config = node.get_config()
 
         if len(node.children) != config.arg_num:
-            raise LocationError(node.loc, 'Expected %d arguments, got %d' % (config.arg_num, len(node.children)))
+            raise LocationError(node.loc, 'For instruction %s, expected %d arguments, got %d' % (node.opcode, config.arg_num, len(node.children)))
 
         if config.arg_num > 0:
             if not is_valid_type(node.children[0].type, config.first_val_types):

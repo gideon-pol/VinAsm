@@ -1,3 +1,8 @@
 MOV %RA, 1
 MOV %RB, %RA
+// hello world
+/*
+hello this is a comment
+*/
+
 STOP

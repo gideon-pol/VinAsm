@@ -1,0 +1,23 @@
+
+MOV %RA, 0
+MOV %RB, 0
+
+loop:
+SSET %RA, %RB
+
+
+
+
+
+ADD %RA, 1
+CMP %RA, 128
+JS $c
+
+MOV %RA, 0
+ADD %RB, 1
+
+$c:
+CMP %RB, 128
+JS $loop
+
+STOP

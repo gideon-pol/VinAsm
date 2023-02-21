@@ -28,31 +28,32 @@ class Generator():
         print("Label " + decl.label + " at " + str(int(self.write_addr/4)))
     
     def generate_instr(self, decl):
-        self.write(bytes([0 for _ in range(2)]))
+        self.write(bytes([0]))
         opcode_bytes = decl.get_code().to_bytes(1, byteorder='big')
         self.write(opcode_bytes)
+        print(decl.opcode + ": " + bytearray_to_hex(opcode_bytes))
 
-        if len(decl.children) == 0:
-            self.write(bytes([0]))
-            return
-
+        registers = 0
         options = 0
         literal = None
         for i, c in enumerate(decl.children):
             if c.type == 'register':
                 if hasattr(decl.get_config(), "SKIP_FIRST_REG"):
                     i += 1
-                options |= c.get_code() << (5 - i * 3)
+                registers |= c.get_code() << (4 - i * 4)
             elif c.type == 'label':
                 options |= USE_LITERAL
                 literal = 0
-                self.unresolved_label_uses.append((self.write_addr + 1, c.label))
+                self.unresolved_label_uses.append((self.write_addr + 2, c.label))
             else:
                 options |= USE_LITERAL
                 literal = c.value
         
+        register_bytes = registers.to_bytes(1, byteorder='big')
+        self.write(register_bytes)
         option_bytes = options.to_bytes(1, byteorder='big')
         self.write(option_bytes)
+        print(decl.opcode + " registers: " + bytearray_to_hex(register_bytes))
         print(decl.opcode + " options: " + bytearray_to_hex(option_bytes))
 
         if literal != None:
